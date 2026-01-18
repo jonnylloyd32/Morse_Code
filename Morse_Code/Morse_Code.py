@@ -12,6 +12,8 @@ from tkinter import Menu
 SPACE = ' '
 EOL = '#'
 EMPTYSTRING = ''
+FULLSTOP = "."
+
 
 def ReportError(s):
 	print('{0:<5}'.format('*'), s, '{0:>5}'.format('*'))
@@ -120,13 +122,15 @@ def ReceiveMorseCode(Dash, Letter, Dot):
 	print(PlainText)
 
 def SendMorseCode(MorseCode):
-	PlainText = input("Enter your message (uppercase letters and spaces only): ")
+	PlainText = input("Enter your message: ")
 	PlainTextLength = len(PlainText)
 	MorseCodeString = EMPTYSTRING
 	for i in range(PlainTextLength):
 		PlainTextLetter = PlainText[i]
 		if PlainTextLetter == SPACE:
 			Index = 0
+		elif PlainTextLetter == FULLSTOP:
+			Index = 27
 		else:
 			Index = ord(PlainTextLetter) - ord('A') + 1
 		CodedLetter = MorseCode[Index]
@@ -139,6 +143,7 @@ def DisplayMenu():
 	print("=========")
 	print("R - Receive Morse code")
 	print("S - Send Morse code")
+	print("P - Print morse code symbols")
 	print("X - Exit program")
 	print()
 
@@ -148,7 +153,7 @@ def GetMenuOption():
 	"""
 	MenuOption = EMPTYSTRING
 	Invalid = True
-	ValidChoices = ["R", "S", "X"]
+	ValidChoices = ["R", "S", "X", "P"]
 	while Invalid:
 		MenuOption = input("Enter your choice: ")
 		MenuOption = MenuOption.upper()
@@ -159,14 +164,24 @@ def GetMenuOption():
 			
 	return MenuOption
 
+
+
+def PrintMorseCodeSymbols(Letters, MorseCode):
+	print("letter  | Symbol")
+	for (this_letter, this_morse_code) in zip(Letters, MorseCode):
+		print("     ", this_letter, "|", this_morse_code)
+
+
 def SendReceiveMessages():
 	Dash = [20,23,0,0,24,1,0,17,0,21,0,25,0,15,11,0,0,0,0,22,13,0,0,10,0,0,0]
 	Dot = [5,18,0,0,2,9,0,26,0,19,0,3,0,7,4,0,0,0,12,8,14,6,0,16,0,0,0]
-	Letter = [' ','A','B','C','D','E','F','G','H','I','J','K','L','M','N','O','P','Q','R','S','T','U','V','W','X','Y','Z']
+	Letter = [' ','A','B','C','D','E','F','G','H','I','J','K','L','M','N','O','P','Q','R','S','T','U','V','W','X','Y','Z', FULLSTOP]
 
-	MorseCode = [' ','.-','-...','-.-.','-..','.','..-.','--.','....','..','.---','-.-','.-..','--','-.','---','.--.','--.-','.-.','...','-','..-','...-','.--','-..-','-.--','--..']
+	MorseCode = [' ','.-','-...','-.-.','-..','.','..-.','--.','....','..','.---','-.-','.-..','--',
+			  '-.','---','.--.','--.-','.-.','...','-','..-','...-','.--','-..-','-.--','--..', '.-.-.-']
 
 	ProgramEnd = False
+
 	while not ProgramEnd:
 		DisplayMenu()
 		MenuOption = GetMenuOption()
@@ -174,6 +189,8 @@ def SendReceiveMessages():
 			ReceiveMorseCode(Dash, Letter, Dot)
 		elif MenuOption == 'S':
 			SendMorseCode(MorseCode)
+		elif MenuOption == 'P':
+			PrintMorseCodeSymbols(Letter, MorseCode)
 		elif MenuOption == 'X':
 			ProgramEnd = True
 
