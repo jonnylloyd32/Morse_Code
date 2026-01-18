@@ -81,6 +81,7 @@ def GetNextLetter(i, Transmission):
 	LetterEnd = False
 	while not LetterEnd:
 		i, Symbol = GetNextSymbol(i, Transmission)
+		print("my i is:", i , "my Symbol is:", Symbol)
 		if Symbol == SPACE:
 			LetterEnd = True
 			i += 4
@@ -111,15 +112,17 @@ def ReceiveMorseCode(Dash, Letter, Dot):
 	PlainText = EMPTYSTRING
 	MorseCodeString = EMPTYSTRING
 	Transmission = GetTransmission()
+	print(len(Transmission))
 	LastChar = len(Transmission) - 1
 	i = 0
 	while i < LastChar:
+		print(i)
 		i, CodedLetter = GetNextLetter(i, Transmission)
 		MorseCodeString = MorseCodeString + SPACE + CodedLetter
 		PlainTextLetter = Decode(CodedLetter, Dash, Letter, Dot)
 		PlainText = PlainText + PlainTextLetter
-	print(MorseCodeString)
-	print(PlainText)
+	print("the morse code string from the file i have just read is: ", MorseCodeString)
+	print("the plain text string from the file i have just read is: ", PlainText)
 
 def SendMorseCode(MorseCode):
 	PlainText = input("Enter your message: ")
@@ -136,7 +139,7 @@ def SendMorseCode(MorseCode):
 			Index = ord(PlainTextLetter) - ord('A') + 1
 		CodedLetter = MorseCode[Index]
 		MorseCodeString = MorseCodeString + CodedLetter + SPACE
-	print(MorseCodeString)
+	return MorseCodeString
 
 def DisplayMenu():
 	print()
@@ -145,6 +148,7 @@ def DisplayMenu():
 	print("R - Receive Morse code")
 	print("S - Send Morse code")
 	print("P - Print morse code symbols")
+	print("T - Transmit morse code")
 	print("X - Exit program")
 	print()
 
@@ -176,8 +180,11 @@ def PrintMorseCodeSymbols(Letters, MorseCode):
 def TransmitMorseCode(MorseCode):
 	TransmittedMorse = SendMorseCode(MorseCode)
 	FileName = input("enter the file name: ")
-	with open(FileName, "w") as Transmission:
-		Transmission.write(TransmittedMorse)
+	print(TransmittedMorse)
+	with open(FileName, "w") as F:
+		F.write(TransmittedMorse)
+	with open(FileName, "r") as F:
+		print("what i have just put in the new file: ", F.read())
 
 def SendReceiveMessages():
 	Dash = [20,23,0,0,24,1,0,17,0,21,0,25,0,15,11,0,0,0,0,22,13,0,0,10,0,0,0]
