@@ -6,6 +6,9 @@
 
 # Version Number : 1.6
 
+from tkinter import Menu
+
+
 SPACE = ' '
 EOL = '#'
 EMPTYSTRING = ''
@@ -140,9 +143,20 @@ def DisplayMenu():
 	print()
 
 def GetMenuOption():
+	"""
+	Asks the user for a menu input, checks if it is in the list of valid choices and returns it.
+	"""
 	MenuOption = EMPTYSTRING
-	while len(MenuOption) != 1:
+	Invalid = True
+	ValidChoices = ["R", "S", "X"]
+	while Invalid:
 		MenuOption = input("Enter your choice: ")
+		MenuOption = MenuOption.upper()
+		if MenuOption not in ValidChoices:
+			print("Invalid choice, please choose a letter from the menu: ")
+		else:
+			Invalid = False
+			
 	return MenuOption
 
 def SendReceiveMessages():
