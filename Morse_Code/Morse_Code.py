@@ -123,6 +123,7 @@ def ReceiveMorseCode(Dash, Letter, Dot):
 
 def SendMorseCode(MorseCode):
 	PlainText = input("Enter your message: ")
+	PlainText = PlainText.upper()
 	PlainTextLength = len(PlainText)
 	MorseCodeString = EMPTYSTRING
 	for i in range(PlainTextLength):
@@ -153,7 +154,7 @@ def GetMenuOption():
 	"""
 	MenuOption = EMPTYSTRING
 	Invalid = True
-	ValidChoices = ["R", "S", "X", "P"]
+	ValidChoices = ["R", "S", "X", "P", "T"]
 	while Invalid:
 		MenuOption = input("Enter your choice: ")
 		MenuOption = MenuOption.upper()
@@ -171,6 +172,12 @@ def PrintMorseCodeSymbols(Letters, MorseCode):
 	for (this_letter, this_morse_code) in zip(Letters, MorseCode):
 		print("     ", this_letter, "|", this_morse_code)
 
+
+def TransmitMorseCode(MorseCode):
+	TransmittedMorse = SendMorseCode(MorseCode)
+	FileName = input("enter the file name: ")
+	with open(FileName, "w") as Transmission:
+		Transmission.write(TransmittedMorse)
 
 def SendReceiveMessages():
 	Dash = [20,23,0,0,24,1,0,17,0,21,0,25,0,15,11,0,0,0,0,22,13,0,0,10,0,0,0]
@@ -191,6 +198,8 @@ def SendReceiveMessages():
 			SendMorseCode(MorseCode)
 		elif MenuOption == 'P':
 			PrintMorseCodeSymbols(Letter, MorseCode)
+		elif MenuOption == "T":
+			TransmitMorseCode(MorseCode)
 		elif MenuOption == 'X':
 			ProgramEnd = True
 
