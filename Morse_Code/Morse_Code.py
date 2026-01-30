@@ -37,6 +37,8 @@ def StripTrailingSpaces(Transmission):
 
 def GetTransmission():
     FileName = input("Enter file name: ")
+    if FileName[-4:] != ".txt":
+        FileName += ".txt"
     try:
         FileHandle = open(FileName, 'r')
         Transmission = FileHandle.readline()
