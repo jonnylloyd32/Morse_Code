@@ -124,6 +124,7 @@ def ReceiveMorseCode(Dash, Letter, Dot, MorseCode):
     print(PlainText)
 
 def SendMorseCode(MorseCode):
+
     PlainText = input("Enter your message: ")
     PlainText = PlainText.upper()
     PlainTextLength = len(PlainText)
@@ -132,14 +133,64 @@ def SendMorseCode(MorseCode):
         PlainTextLetter = PlainText[i]
         if PlainTextLetter == SPACE:
             Index = 0
+
         elif PlainTextLetter == FULLSTOP:
             Index = 27
+
         else: 
             Index = ord(PlainTextLetter) - ord('A') + 1
+
         CodedLetter = MorseCode[Index]
         MorseCodeString = MorseCodeString + CodedLetter + SPACE
-    #print(MorseCodeString)
+    print(MorseCodeString)
+
+    lSep = "0"
+    wSep = "1"
+    dot = "2"
+    dash = "3"
+    Quart = ""
+    space = 0
+    chars = MorseCodeString  
+
+    for i in range(len(chars)):
+        if chars[i] == ".":
+            Quart += dot
+            space = 0
+
+        elif chars[i] == "-":
+            Quart += dash
+            space = 0
+
+        elif chars[i] == " ":
+            space += 1
+            if space == 3:
+                Quart += wSep
+            elif space == 1:
+                Quart += lSep
+
+
+
+
+#    '''
+#            if space == 3:
+#                Quart += lSep
+#                space = 0
+#
+#            elif space == 1:
+#                Quart += wSep
+#                space = 0
+#    '''
+
+
+    print(Quart)
+    print("my length of the morse code string is: ", len(MorseCodeString))
+  
     return(MorseCodeString)
+
+
+
+
+
 
 def DisplayMenu():
     print()
@@ -149,8 +200,26 @@ def DisplayMenu():
     print("S - Send Morse code")
     print("P - Print Morse code symbols")
     print("T - Transmit Morse code")
+    print("C - Convert Morse code")
     print("X - Exit program")
     print()
+
+def ConvertMorseCode(MorseCode, Letter):
+    DecryptedMorse = ""
+    MorseMessage = input("enter a morse code message using - and . only: ")
+    MorseLen = len(MorseMessage)
+    # splits the morse code string into individuals based on what is inside the brackets; in this case it is a space
+    symbol = MorseMessage.split(" ")
+    for i in range(len(symbol)):
+        if symbol[i] == "":
+            DecryptedMorse += " "
+        if symbol[i] in MorseCode:
+            # creates a variable that stores the index value of where the symbol is in the list - morsecode -.
+            # ".index(name)" stores the index value of where the names variable is in the list prior
+            AlphaIndex = MorseCode.index(symbol[i])
+            # this finds the letter in the list - Letter - that has the same index value as the symbol in MorseCode and adds it to the string
+            DecryptedMorse += Letter[AlphaIndex]
+    print(DecryptedMorse)
 
 
 def GetMenuOption():
@@ -159,7 +228,7 @@ def GetMenuOption():
 	"""
 	MenuOption = EMPTYSTRING
 	Invalid = True
-	ValidChoices = ["R", "S", "X", "P", "T"]
+	ValidChoices = ["R", "S", "X", "P", "T", "C"]
 	while Invalid:
 		MenuOption = input("Enter your choice: ")
 		MenuOption = MenuOption.upper()
@@ -208,7 +277,8 @@ def SendReceiveMessages():
     Dash = [20,23,0,0,24,1,0,17,0,21,0,25,0,15,11,0,0,0,0,22,13,0,0,10,0,0,0]
     Dot = [5,18,0,0,2,9,0,26,0,19,0,3,0,7,4,0,0,0,12,8,14,6,0,16,0,0,0]
     Letter = [' ','A','B','C','D','E','F','G','H','I','J','K','L','M','N','O','P','Q','R','S','T','U','V','W','X','Y','Z', FULLSTOP]
-    MorseCode = [' ','.-','-...','-.-.','-..','.','..-.','--.','....','..','.---','-.-','.-..','--','-.','---','.--.','--.-','.-.','...','-','..-','...-','.--','-..-','-.--','--..', '.-.-.-']
+    MorseCode = [' ','.-','-...','-.-.','-..','.','..-.','--.','....','..','.---','-.-','.-..',
+                 '--','-.','---','.--.','--.-','.-.','...','-','..-','...-','.--','-..-','-.--','--..', '.-.-.-']
 
     ProgramEnd = False
     while not ProgramEnd:
@@ -222,6 +292,8 @@ def SendReceiveMessages():
             PrintMorseCodeSymbols(Letter, MorseCode)
         elif MenuOption == 'T':
             TransmitMorseCode(MorseCode)
+        elif MenuOption == "C":
+            ConvertMorseCode(MorseCode, Letter)
         elif MenuOption == 'X':
             ProgramEnd = True
     
