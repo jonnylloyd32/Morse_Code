@@ -7,14 +7,17 @@
 
 # Version Number : 1.6
 
+
 SPACE = ' '
 EOL = '#'
 EMPTYSTRING = ''
 FULLSTOP = "."
 
+
 def ReportError(s):
     print('{0:<5}'.format('*'),s,'{0:>5}'.format('*')) 
         
+
 def StripLeadingSpaces(Transmission): 
     TransmissionLength = len(Transmission)
     if TransmissionLength > 0:
@@ -28,12 +31,14 @@ def StripLeadingSpaces(Transmission):
         ReportError("No signal received")
     return Transmission
 
+
 def StripTrailingSpaces(Transmission): 
     LastChar = len(Transmission) - 1
     while Transmission[LastChar] == SPACE:
         LastChar -= 1
         Transmission = Transmission[:-1]
     return Transmission  
+
 
 def GetTransmission():
     FileName = input("Enter file name: ")
@@ -51,6 +56,7 @@ def GetTransmission():
         ReportError("No transmission found")
         Transmission = EMPTYSTRING
     return Transmission
+
 
 def GetNextSymbol(i, Transmission):
     if Transmission[i] == EOL:
@@ -75,6 +81,7 @@ def GetNextSymbol(i, Transmission):
             Symbol = EMPTYSTRING
     return i, Symbol 
 
+
 def GetNextLetter(i, Transmission):
     SymbolString = EMPTYSTRING
     LetterEnd = False
@@ -93,6 +100,7 @@ def GetNextLetter(i, Transmission):
         SymbolString = SymbolString + Symbol
     return i, SymbolString
 
+
 def Decode(CodedLetter, Dash, Letter, Dot, MorseCode):
     CodedLetterLength = len(CodedLetter)
     Pointer = 0
@@ -108,6 +116,7 @@ def Decode(CodedLetter, Dash, Letter, Dot, MorseCode):
             Pointer = Dot[Pointer]
     return Letter[Pointer]
 
+
 def ReceiveMorseCode(Dash, Letter, Dot, MorseCode): 
     PlainText = EMPTYSTRING
     MorseCodeString = EMPTYSTRING
@@ -122,6 +131,7 @@ def ReceiveMorseCode(Dash, Letter, Dot, MorseCode):
         PlainText = PlainText + PlainTextLetter
     print(MorseCodeString)
     print(PlainText)
+
 
 def SendMorseCode(MorseCode):
 
@@ -184,7 +194,7 @@ def SendMorseCode(MorseCode):
 
     print(Quart)
     print("my length of the morse code string is: ", len(MorseCodeString))
-  
+    print(CalculateTransmissionTime(MorseCodeString))
     return(MorseCodeString)
 
 
@@ -330,6 +340,38 @@ def SendEncryptedMorseCode(MorseCode):
         MorseCodeString = MorseCodeString + CodedLetter + SPACE
     print(MorseCodeString)
 
+
+def CalculateTransmissionTime(MorseMessage):
+   sumtime = 0
+   space = 0
+   i = 0
+   while i < len(MorseMessage):
+        if MorseMessage[i] == ".":
+            sumtime += 2
+            
+        elif MorseMessage[i] == "-":
+            sumtime += 4
+            
+        elif MorseMessage[i] == " ":
+            space = 0
+            sumtime += 3
+
+            while i < len(MorseMessage) and MorseMessage[i] == " ":
+                space += 1
+                i += 1
+            i -= 1  # adjust because loop increments i
+
+            if space == 1:
+                sumtime += 0  # gap between symbols already counted
+            elif space == 3:
+                sumtime += 3 - 1  # letter gap minus last symbol gap
+            elif space >= 7:
+                sumtime += 7 - 1  # word gap minus last symbol gap
+        i += 1
+            
+
+   return(sumtime)
+   return("sum of the time is: ", 80)
 
 
 def SendReceiveMessages():
