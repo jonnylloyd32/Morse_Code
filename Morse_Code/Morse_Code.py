@@ -196,11 +196,12 @@ def DisplayMenu():
     print()
     print("Main Menu")
     print("=========")
+    print("C - Convert Morse code")
+    print("E - Send encrypted message")
+    print("P - Print Morse code symbols")
     print("R - Receive Morse code")
     print("S - Send Morse code")
-    print("P - Print Morse code symbols")
     print("T - Transmit Morse code")
-    print("C - Convert Morse code")
     print("X - Exit program")
     print()
 
@@ -228,7 +229,7 @@ def GetMenuOption():
 	"""
 	MenuOption = EMPTYSTRING
 	Invalid = True
-	ValidChoices = ["R", "S", "X", "P", "T", "C"]
+	ValidChoices = ["R", "S", "X", "P", "T", "C", "E"]
 	while Invalid:
 		MenuOption = input("Enter your choice: ")
 		MenuOption = MenuOption.upper()
@@ -272,6 +273,64 @@ def TransmitMorseCode(MorseCode):
     print(Transmission)
     
 
+def SendEncryptedMorseCode(MorseCode):
+    shiftedmessage = ""
+    '''
+    try:
+        usercypher = input("enter how many letter you want to shift the message by: ")
+        test = usercypher / 1
+    except:
+        ReportError("must be an integer")
+    '''
+    invalid = True
+    while invalid:
+        usercypher = int(input("enter how many letter you want to shift the message by: "))
+        if isinstance(usercypher, int) == True:
+            invalid = False
+        else:
+            invalid = True
+            ReportError("must be an integer")
+    usermessage = input("send your desired message")
+    usermessage = usermessage.upper()
+    print("uppercase message =", usermessage)
+    for i in range(len(usermessage)):
+        currentletterASCII = ord(usermessage[i])
+        if usermessage[i] != " ":
+            shiftedASCII  = currentletterASCII + usercypher
+            if shiftedASCII > 90:
+                shiftedASCII = shiftedASCII - 90
+                newletter = chr(shiftedASCII)
+            else:
+                newletter = chr(shiftedASCII)
+
+            shiftedmessage += newletter
+    print("the ceaser cyphered message is: ", shiftedmessage)
+    
+
+
+
+
+    #now convert to ascii after the index shifting is done
+    PlainText = shiftedmessage
+    PlainText = PlainText.upper()
+    PlainTextLength = len(PlainText)
+    MorseCodeString = EMPTYSTRING
+    for i in range(PlainTextLength):
+        PlainTextLetter = PlainText[i]
+        if PlainTextLetter == SPACE:
+            Index = 0
+
+        elif PlainTextLetter == FULLSTOP:
+            Index = 27
+
+        else: 
+            Index = ord(PlainTextLetter) - ord('A') + 1
+
+        CodedLetter = MorseCode[Index]
+        MorseCodeString = MorseCodeString + CodedLetter + SPACE
+    print(MorseCodeString)
+
+
 
 def SendReceiveMessages():
     Dash = [20,23,0,0,24,1,0,17,0,21,0,25,0,15,11,0,0,0,0,22,13,0,0,10,0,0,0]
@@ -294,6 +353,8 @@ def SendReceiveMessages():
             TransmitMorseCode(MorseCode)
         elif MenuOption == "C":
             ConvertMorseCode(MorseCode, Letter)
+        elif MenuOption == "E":
+            SendEncryptedMorseCode(MorseCode)
         elif MenuOption == 'X':
             ProgramEnd = True
     
